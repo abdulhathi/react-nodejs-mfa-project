@@ -3,8 +3,11 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import session from 'express-session'
 import passport from 'passport'
+import connectDB from './configs/connectDB.ts'
+import router from './routes/authRoutes.ts'
 
 dotenv.config()
+connectDB()
 
 const app = express()
 // Middlewares
@@ -28,7 +31,9 @@ app.use(
 )
 app.use(passport.initialize())
 app.use(passport.session())
+
 // Routes
+app.use('/api/auth', router)
 
 // Listen app
 const port = process.env.PORT || 7001
