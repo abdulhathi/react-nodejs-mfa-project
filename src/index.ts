@@ -4,7 +4,7 @@ import cors from 'cors'
 import session from 'express-session'
 import passport from 'passport'
 import connectDB from './configs/connectDB.ts'
-import router from './routes/authRoutes.ts'
+import authRoutes from './routes/authRoutes.ts'
 
 dotenv.config()
 connectDB()
@@ -33,7 +33,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // Routes
-app.use('/api/auth', router)
+app.use('/api/auth', authRoutes)
 
 // Listen app
 const port = process.env.PORT || 7001
