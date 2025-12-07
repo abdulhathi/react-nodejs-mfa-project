@@ -1,6 +1,6 @@
-import mongoose, { Model, Schema } from 'mongoose'
+import mongoose, { Document, Model, Schema } from 'mongoose'
 
-export interface IUser {
+export interface IUser extends Document {
   username: string
   password: string
   isMFAActive: boolean

@@ -1,13 +1,30 @@
-import type { verify } from 'crypto'
 import type { Request, Response, NextFunction } from 'express'
+import type { IUser } from '../models/user.model.ts'
+import User from '../models/user.model.ts'
+import bcrypt from 'bcryptjs'
 
 export const AuthController = {
-  register(req: Request, res: Response, next: NextFunction) {},
-  login(req: Request, res: Response, next: NextFunction) {},
-  logout(req: Request, res: Response, next: NextFunction) {},
-  status(req: Request, res: Response, next: NextFunction) {},
+  async register(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { username, password } = req.body
+      const hashPassword = await bcrypt.hash(password, 10)
+      const newUser: IUser = new User({
+        username,
+        password: hashPassword,
+        isMFAActive: false,
+      })
+      console.log('New user: ', newUser)
+      await newUser.save()
+      res.status(201).send({ message: 'User registered successfully' })
+    } catch (error: any) {
+      next(error)
+    }
+  },
+  async login(req: Request, res: Response, next: NextFunction) {},
+  async logout(req: Request, res: Response, next: NextFunction) {},
+  async status(req: Request, res: Response, next: NextFunction) {},
 
-  setup2FA(req: Request, res: Response, next: NextFunction) {},
-  verify2FA(req: Request, res: Response, next: NextFunction) {},
-  reset2FA(req: Request, res: Response, next: NextFunction) {},
+  async setup2FA(req: Request, res: Response, next: NextFunction) {},
+  async verify2FA(req: Request, res: Response, next: NextFunction) {},
+  async reset2FA(req: Request, res: Response, next: NextFunction) {},
 }
